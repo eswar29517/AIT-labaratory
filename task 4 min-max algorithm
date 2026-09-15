@@ -1,0 +1,33 @@
+# Minimax Algorithm
+
+height = int(input("Enter tree height: "))
+n = 2 ** height
+
+print(f"Enter {n} leaf node values:")
+values = list(map(int, input().split()))
+
+if len(values)!= n:
+    print(f"Please enter exactly {n} values")
+else:
+    print("Leaf values:", values)
+
+    # True = Max turn, False = Min turn
+    # For height 3: Level 3->2 is MIN, 2->1 is MAX, 1->0 is MAX (root)
+    # We start from bottom, so we need to know whose turn it is
+    is_max = False # bottom level is MIN if height is odd, else MAX.
+    # Better logic: alternate starting from bottom
+
+    curr_height = height
+    while len(values) > 1:
+        new_values = []
+        for i in range(0, len(values), 2):
+            if curr_height % 2 == 0: # even height -> min in your diagram
+                new_values.append(min(values[i], values[i+1]))
+            else: # odd height -> max
+                new_values.append(max(values[i], values[i+1]))
+
+        values = new_values
+        curr_height -= 1
+        print(f"Level {curr_height} values: {values}")
+
+    print("Mini-max value:", values[0])
