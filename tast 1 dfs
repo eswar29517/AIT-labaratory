@@ -1,0 +1,26 @@
+# Autonomous Rover Cave Mapping using DFS
+
+graph = {
+    'A': ['B', 'C'],
+    'B': ['A', 'D', 'E'],
+    'C': ['A', 'F'],
+    'D': ['B'],
+    'E': ['B', 'F', 'G'],
+    'F': ['C', 'E'],
+    'G': ['E']
+}
+
+visited = set()
+
+
+def dfs(node):
+    if node not in visited:
+        print(node, end=" ")
+        visited.add(node)
+
+        for neighbour in graph[node]:
+            dfs(neighbour)
+
+
+print("Rover exploration order:")
+dfs('A')
