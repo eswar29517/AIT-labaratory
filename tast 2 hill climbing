@@ -1,0 +1,81 @@
+# 8-Puzzle using Hill Climbing Algorithm
+
+goal = [1, 2, 3,
+        4, 5, 6,
+        7, 8, 0]
+
+current = [1, 2, 3,
+           4, 0, 6,
+           7, 5, 8]
+
+
+# Heuristic function: number of misplaced tiles
+def heuristic(state):
+    count = 0
+    for i in range(9):
+        if state[i] != 0 and state[i] != goal[i]:
+            count += 1
+    return count
+
+
+# Generate possible neighboring states
+def get_neighbors(state):
+    neighbors = []
+
+    blank = state.index(0)
+
+    # Possible movements: up, down, left, right
+    moves = [-3, 3, -1, 1]
+
+    for move in moves:
+        new_position = blank + move
+
+        # Check valid position
+        if new_position < 0 or new_position >= 9:
+            continue
+
+        # Prevent left-right wrapping
+        if blank % 3 == 0 and move == -1:
+            continue
+
+        if blank % 3 == 2 and move == 1:
+            continue
+
+        # Create new state
+        new_state = state.copy()
+        new_state[blank], new_state[new_position] = \
+            new_state[new_position], new_state[blank]
+
+        neighbors.append(new_state)
+
+    return neighbors
+
+
+# Hill Climbing
+while True:
+
+    print("Current State:")
+    for i in range(0, 9, 3):
+        print(current[i:i + 3])
+
+    print("Heuristic:", heuristic(current))
+    print()
+
+    # Goal test
+    if current == goal:
+        print("Goal Reached!")
+        break
+
+    # Generate neighbors
+    neighbors = get_neighbors(current)
+
+    # Select state with minimum heuristic value
+    best_state = min(neighbors, key=heuristic)
+
+    # If no better state exists, stop
+    if heuristic(best_state) >= heuristic(current):
+        print("No better state found!")
+        break
+
+    # Move to better state
+    current = best_state
